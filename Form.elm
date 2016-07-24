@@ -1,0 +1,76 @@
+module Form exposing (..)
+
+import Html exposing (..)
+import Html.App as App
+import Html.Events exposing (onInput, onClick)
+import Field
+import Data exposing (..)
+
+
+-- main =
+--     App.beginnerProgram
+--         { model = initialModel
+--         , view = view
+--         , update = update
+--         }
+-- MODEL
+
+
+type alias Model =
+    { f1 : Field.Field
+    , f2 : Field.Field
+    , f3 : Field.Field
+    , infinitiv : String
+    }
+
+
+initialForm : Data -> Model
+initialForm data =
+    { f1 = Field.Field "Prasens" data.f1 "" Field.None
+    , f2 = Field.Field "Präteritum" data.f2 "" Field.None
+    , f3 = Field.Field "Perfekt" data.f3 "" Field.None
+    , infinitiv = data.infinitiv
+    }
+
+
+
+-- UPDATE
+
+
+type Msg
+    = Check
+    | F1Msg Field.Msg
+    | F2Msg Field.Msg
+    | F3Msg Field.Msg
+
+
+update msg model =
+    case msg of
+        Check ->
+            { model
+                | f1 = Field.update Field.Check model.f1
+                , f2 = Field.update Field.Check model.f2
+                , f3 = Field.update Field.Check model.f3
+            }
+
+        F1Msg msg ->
+            { model | f1 = Field.update msg model.f1 }
+
+        F2Msg msg ->
+            { model | f2 = Field.update msg model.f2 }
+
+        F3Msg msg ->
+            { model | f3 = Field.update msg model.f3 }
+
+
+
+-- VIEW
+
+
+view model =
+    div []
+        [ App.map F1Msg (Field.view model.f1)
+        , App.map F2Msg (Field.view model.f2)
+        , App.map F3Msg (Field.view model.f3)
+        , button [ onClick Check ] [ text "Check bre" ]
+        ]
