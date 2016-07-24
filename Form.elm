@@ -26,9 +26,9 @@ type alias Model =
 
 initialForm : Data -> Model
 initialForm data =
-    { f1 = Field.Field "Prasens" data.f1 "" Field.None
-    , f2 = Field.Field "Präteritum" data.f2 "" Field.None
-    , f3 = Field.Field "Perfekt" data.f3 "" Field.None
+    { f1 = Field.Field "Präsens (3. Person Singular)" data.f1 "" Field.None
+    , f2 = Field.Field "Präteritum (3. Person Singular)" data.f2 "" Field.None
+    , f3 = Field.Field "Perfekt (3. Person Singular)" data.f3 "" Field.None
     , infinitiv = data.infinitiv
     }
 
@@ -68,9 +68,14 @@ update msg model =
 
 
 view model =
-    div []
-        [ App.map F1Msg (Field.view model.f1)
-        , App.map F2Msg (Field.view model.f2)
-        , App.map F3Msg (Field.view model.f3)
-        , button [ onClick Check ] [ text "Check bre" ]
-        ]
+    case model.infinitiv of
+        "" ->
+            div [] []
+
+        str ->
+            div []
+                [ App.map F1Msg (Field.view model.f1)
+                , App.map F2Msg (Field.view model.f2)
+                , App.map F3Msg (Field.view model.f3)
+                , button [ onClick Check ] [ text "Check bre" ]
+                ]
