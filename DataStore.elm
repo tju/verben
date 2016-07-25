@@ -7,7 +7,7 @@ getDataStore : List Data
 getDataStore =
     -- todo real store from DB?!
     [ { infinitiv = "gehen"
-      , f1 = "gehe"
+      , f1 = "geht"
       , f2 = "ging"
       , f3 = "ist gegangen"
       , score = 0

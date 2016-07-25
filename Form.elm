@@ -16,20 +16,34 @@ import Data exposing (..)
 -- MODEL
 
 
-type alias Model =
+type alias Form =
     { f1 : Field.Field
     , f2 : Field.Field
     , f3 : Field.Field
     , infinitiv : String
+    , score : Int
+    , checked : Bool
     }
 
 
-initialForm : Data -> Model
+initialForm : Data -> Form
 initialForm data =
     { f1 = Field.Field "Präsens (3. Person Singular)" data.f1 "" Field.None
     , f2 = Field.Field "Präteritum (3. Person Singular)" data.f2 "" Field.None
     , f3 = Field.Field "Perfekt (3. Person Singular)" data.f3 "" Field.None
     , infinitiv = data.infinitiv
+    , score = data.score
+    , checked = False
+    }
+
+
+getData : Form -> Data
+getData form =
+    { f1 = form.f1.expected
+    , f2 = form.f2.expected
+    , f3 = form.f3.expected
+    , infinitiv = form.infinitiv
+    , score = form.score
     }
 
 
@@ -47,11 +61,29 @@ type Msg
 update msg model =
     case msg of
         Check ->
-            { model
-                | f1 = Field.update Field.Check model.f1
-                , f2 = Field.update Field.Check model.f2
-                , f3 = Field.update Field.Check model.f3
-            }
+            let
+                f1 =
+                    Field.update Field.Check model.f1
+
+                f2 =
+                    Field.update Field.Check model.f2
+
+                f3 =
+                    Field.update Field.Check model.f3
+
+                score =
+                    if hasErrors model then
+                        model.score - 1
+                    else
+                        model.score + 1
+            in
+                { model
+                    | f1 = f1
+                    , f2 = f2
+                    , f3 = f3
+                    , score = score
+                    , checked = True
+                }
 
         F1Msg msg ->
             { model | f1 = Field.update msg model.f1 }
@@ -61,6 +93,14 @@ update msg model =
 
         F3Msg msg ->
             { model | f3 = Field.update msg model.f3 }
+
+
+hasErrors : Form -> Bool
+hasErrors form =
+    if (form.f1.status == Field.Success && form.f2.status == Field.Success && form.f3.status == Field.Success) then
+        False
+    else
+        True
 
 
 
@@ -77,5 +117,12 @@ view model =
                 [ App.map F1Msg (Field.view model.f1)
                 , App.map F2Msg (Field.view model.f2)
                 , App.map F3Msg (Field.view model.f3)
-                , button [ onClick Check ] [ text "Check bre" ]
+                , checkButton model.checked
                 ]
+
+
+checkButton checked =
+    if checked then
+        text ""
+    else
+        button [ onClick Check ] [ text "Check bre" ]

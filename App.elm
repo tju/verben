@@ -18,9 +18,8 @@ import Data exposing (..)
 
 type alias AppModel =
     { dataStore : List Data
-    , form : Form.Model
-    , score : Int
-    , isFormVisible : Bool
+    , form : Form.Form
+    , initialState : Bool
     }
 
 
@@ -32,8 +31,7 @@ initialAppModel : AppModel
 initialAppModel =
     { dataStore = getDataStore
     , form = emptyForm
-    , score = 0
-    , isFormVisible = False
+    , initialState = True
     }
 
 
@@ -46,30 +44,34 @@ type Msg
 -- UPDATE
 
 
-update msg model =
+update msg app =
     case msg of
         FormMsg fMsg ->
-            { model | form = Form.update fMsg model.form }
+            { app | form = Form.update fMsg app.form }
 
         Next ->
             let
                 ( newForm, ds ) =
-                    getNextForm model
+                    getNextForm app
             in
-                { model
+                { app
                     | form = newForm
                     , dataStore = ds
+                    , initialState = False
                 }
 
 
-getNextForm : AppModel -> ( Form.Model, List Data )
-getNextForm model =
-    case model.dataStore of
+getNextForm : AppModel -> ( Form.Form, List Data )
+getNextForm app =
+    case app.dataStore of
         [] ->
             ( emptyForm, [] )
 
         h :: t ->
-            ( initialForm h, t )
+            if app.initialState then
+                ( initialForm h, t )
+            else
+                ( initialForm h, List.append t [ (Form.getData app.form) ] )
 
 
 
@@ -79,11 +81,21 @@ getNextForm model =
 view model =
     div []
         [ h1 [] [ text "Verben ninja" ]
-        , h2 [] [ text <| "Score:" ++ toString model.score ]
+        , h2 [] [ text <| "Score:" ++ toString model.form.score ]
         , div []
             [ App.map FormMsg (Form.view model.form) ]
-        , button [ onClick Next ] [ text "Next" ]
+        , nextButton model
+        , div [] [ text <| toString model ]
         ]
+
+
+nextButton model =
+    if model.initialState then
+        button [ onClick Next ] [ text "Start" ]
+    else if model.form.checked then
+        button [ onClick Next ] [ text "Next" ]
+    else
+        text ""
 
 
 main =
