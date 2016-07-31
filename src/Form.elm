@@ -120,9 +120,7 @@ view model =
         str ->
             form [ action "", class "form", method "" ]
                 [ div [ class "header header-primary text-center" ]
-                    [ h4 []
-                        [ text "Unregelmäßige Verben" ]
-                    , h2 [] [ text str ]
+                    [ h2 [] [ text str ]
                     ]
                 , div [ class "content" ]
                     [ App.map F1Msg (Field.view model.f1)

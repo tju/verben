@@ -1,17 +1,8 @@
 module Field exposing (..)
 
 import Html exposing (..)
-import Html.App as Html
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
-
-
--- main =
---     Html.beginnerProgram
---         { model = initialModel
---         , view = view
---         , update = update
---         }
 
 
 type alias Field =
@@ -28,12 +19,6 @@ type ValidationStatus
     | Success
 
 
-
--- initialModel : Field
--- initialModel =
---     Field "Präteritum" "ging" "gugu" None
-
-
 type Msg
     = SetField String
     | Check
@@ -45,31 +30,26 @@ type Msg
 
 view : Field -> Html Msg
 view field =
-    div [ class "form-group label-floating", (getStatusClass field.status) ]
-        [ label [ class "control-label" ] [ text field.label ]
-        , input [ class "form-control", type' "text", onInput SetField, value field.entered ] []
-        , geStatusIcon field.status
-          -- , button [ onClick Check ] [ text "Check bre" ]
-          -- , div [] [ text (toString field) ]
+    div [ getStatusClass field.status ]
+        [ label [] [ text field.label ]
+        , fieldTemplate field
         ]
 
 
-geStatusIcon : ValidationStatus -> Html Msg
-geStatusIcon status =
-    case status of
+fieldTemplate field =
+    case field.status of
         None ->
-            span [] []
-
-        Success ->
-            span [ class "form-control-feedback" ]
-                [ i [ class "material-icons" ]
-                    [ text "done" ]
-                ]
+            input [ type' "text", onInput SetField, value field.entered ] []
 
         Error ->
-            span [ class "form-control-feedback" ]
-                [ i [ class "material-icons" ]
-                    [ text "clear" ]
+            div [ class "result"]
+                [ span [ class "expected" ] [ text field.expected ]
+                , span [ class "entered" ] [ text field.entered ]
+                ]
+
+        Success ->
+            div [ class "result"]
+                [ span [ class "entered" ] [ text field.entered ]
                 ]
 
 

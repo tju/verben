@@ -1,10 +1,14 @@
 @import (inline) "../node_modules/normalize.css/normalize.css";
 @import (inline) "../node_modules/milligram/dist/milligram.min.css";
 
+
+@errorColor: red;
+@successColor: green;
+
 h1,h2,h3,h4,h5,h6,strong{
     color: #333;
-    font-family: Cutive, Georgia, serif;
 }
+
 body {
     font-family: Roboto, sans-serif;
     background: #e2e1e0;
@@ -35,4 +39,40 @@ body {
     .container{
         width: 90%;
     }
+}
+
+
+.has-error {
+    label{
+
+    }
+    .result{
+      padding-bottom: 1.5em;
+      span.entered {
+        color: @errorColor;
+        border-color: @errorColor;
+        font-size: 1em;
+        text-decoration: line-through;
+      }
+      span.expected {
+        color: black;
+        font-weight: bold;
+        font-size: 1.5em;
+        padding-right: 1.5em;
+      }
+    }
+
+}
+
+.has-success {
+  label{
+  }
+  .result{
+    padding-bottom: 1.5em;
+    span.entered {
+      color: @successColor;
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+  }
 }

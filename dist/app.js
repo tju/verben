@@ -7769,58 +7769,6 @@ var _user$project$Field$getStatusClass = function (status) {
 			return _elm_lang$html$Html_Attributes$class('has-error');
 	}
 };
-var _user$project$Field$geStatusIcon = function (status) {
-	var _p1 = status;
-	switch (_p1.ctor) {
-		case 'None':
-			return A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[]));
-		case 'Success':
-			return A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('form-control-feedback')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$i,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('material-icons')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('done')
-							]))
-					]));
-		default:
-			return A2(
-				_elm_lang$html$Html$span,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('form-control-feedback')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$i,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('material-icons')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text('clear')
-							]))
-					]));
-	}
-};
 var _user$project$Field$Field = F4(
 	function (a, b, c, d) {
 		return {label: a, expected: b, entered: c, status: d};
@@ -7833,11 +7781,11 @@ var _user$project$Field$checkStatus = function (field) {
 var _user$project$Field$None = {ctor: 'None'};
 var _user$project$Field$update = F2(
 	function (msg, field) {
-		var _p2 = msg;
-		if (_p2.ctor === 'SetField') {
+		var _p1 = msg;
+		if (_p1.ctor === 'SetField') {
 			return _elm_lang$core$Native_Utils.update(
 				field,
-				{entered: _p2._0, status: _user$project$Field$None});
+				{entered: _p1._0, status: _user$project$Field$None});
 		} else {
 			return _elm_lang$core$Native_Utils.update(
 				field,
@@ -7850,12 +7798,77 @@ var _user$project$Field$Check = {ctor: 'Check'};
 var _user$project$Field$SetField = function (a) {
 	return {ctor: 'SetField', _0: a};
 };
+var _user$project$Field$fieldTemplate = function (field) {
+	var _p2 = field.status;
+	switch (_p2.ctor) {
+		case 'None':
+			return A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('text'),
+						_elm_lang$html$Html_Events$onInput(_user$project$Field$SetField),
+						_elm_lang$html$Html_Attributes$value(field.entered)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		case 'Error':
+			return A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('result')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('expected')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(field.expected)
+							])),
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('entered')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(field.entered)
+							]))
+					]));
+		default:
+			return A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('result')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('entered')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(field.entered)
+							]))
+					]));
+	}
+};
 var _user$project$Field$view = function (field) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('form-group label-floating'),
 				_user$project$Field$getStatusClass(field.status)
 			]),
 		_elm_lang$core$Native_List.fromArray(
@@ -7863,25 +7876,12 @@ var _user$project$Field$view = function (field) {
 				A2(
 				_elm_lang$html$Html$label,
 				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('control-label')
-					]),
+					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text(field.label)
 					])),
-				A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('form-control'),
-						_elm_lang$html$Html_Attributes$type$('text'),
-						_elm_lang$html$Html_Events$onInput(_user$project$Field$SetField),
-						_elm_lang$html$Html_Attributes$value(field.entered)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				_user$project$Field$geStatusIcon(field.status)
+				_user$project$Field$fieldTemplate(field)
 			]));
 };
 
@@ -7991,14 +7991,6 @@ var _user$project$Form$view = function (model) {
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[
-							A2(
-							_elm_lang$html$Html$h4,
-							_elm_lang$core$Native_List.fromArray(
-								[]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('Unregelmäßige Verben')
-								])),
 							A2(
 							_elm_lang$html$Html$h2,
 							_elm_lang$core$Native_List.fromArray(
