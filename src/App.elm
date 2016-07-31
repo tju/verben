@@ -92,7 +92,7 @@ view app =
                 [ Profile.view app.profile
                 , div [ class "row" ]
                     [ button
-                        [ class "button start-button"
+                        [ class "button"
                         , type' "button"
                         , onClick Next
                         ]
@@ -103,10 +103,19 @@ view app =
         PlayLevel ->
             div []
                 [ div [] [ App.map FormMsg (Form.view app.form) ]
-                , div
-                    [ class "button start-button"
-                    , type' "button"
-                    , onClick Next
-                    ]
-                    [ text "NEXT" ]
+                , getNextButton app
                 ]
+
+
+getNextButton app =
+    if app.form.checked then
+        div [ class "row" ]
+            [ button
+                [ class "button"
+                , type' "button"
+                , onClick Next
+                ]
+                [ text "Next" ]
+            ]
+    else
+        text ""

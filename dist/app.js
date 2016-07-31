@@ -7949,6 +7949,20 @@ var _user$project$Form$F1Msg = function (a) {
 	return {ctor: 'F1Msg', _0: a};
 };
 var _user$project$Form$Check = {ctor: 'Check'};
+var _user$project$Form$checkButton = function (checked) {
+	return checked ? _elm_lang$html$Html$text('') : A2(
+		_elm_lang$html$Html$button,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$type$('button'),
+				_elm_lang$html$Html_Attributes$class('button'),
+				_elm_lang$html$Html_Events$onClick(_user$project$Form$Check)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Check')
+			]));
+};
 var _user$project$Form$view = function (model) {
 	var _p1 = model.infinitiv;
 	if (_p1 === '') {
@@ -8015,43 +8029,9 @@ var _user$project$Form$view = function (model) {
 							_user$project$Form$F3Msg,
 							_user$project$Field$view(model.f3))
 						])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('footer text-center'),
-							_elm_lang$html$Html_Attributes$type$('button'),
-							_elm_lang$html$Html_Events$onClick(_user$project$Form$Check)
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$a,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Attributes$class('btn btn-primary btn-lg'),
-									_elm_lang$html$Html_Attributes$href('#pablo')
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('Check')
-								]))
-						]))
+					_user$project$Form$checkButton(model.checked)
 				]));
 	}
-};
-var _user$project$Form$checkButton = function (checked) {
-	return checked ? _elm_lang$html$Html$text('') : A2(
-		_elm_lang$html$Html$button,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$type$('button'),
-				_elm_lang$html$Html_Events$onClick(_user$project$Form$Check)
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text('Check')
-			]));
 };
 
 var _user$project$Profile$view = function (profile) {
@@ -8185,6 +8165,29 @@ var _user$project$App$update = F2(
 var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
 var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$Form$emptyForm, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile};
 var _user$project$App$Next = {ctor: 'Next'};
+var _user$project$App$getNextButton = function (app) {
+	return app.form.checked ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('row')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('button'),
+						_elm_lang$html$Html_Attributes$type$('button'),
+						_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Next')
+					]))
+			])) : _elm_lang$html$Html$text('');
+};
 var _user$project$App$FormMsg = function (a) {
 	return {ctor: 'FormMsg', _0: a};
 };
@@ -8210,7 +8213,7 @@ var _user$project$App$view = function (app) {
 							_elm_lang$html$Html$button,
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html_Attributes$class('button start-button'),
+									_elm_lang$html$Html_Attributes$class('button'),
 									_elm_lang$html$Html_Attributes$type$('button'),
 									_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
 								]),
@@ -8238,18 +8241,7 @@ var _user$project$App$view = function (app) {
 							_user$project$App$FormMsg,
 							_user$project$Form$view(app.form))
 						])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('button start-button'),
-							_elm_lang$html$Html_Attributes$type$('button'),
-							_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('NEXT')
-						]))
+					_user$project$App$getNextButton(app)
 				]));
 	}
 };
