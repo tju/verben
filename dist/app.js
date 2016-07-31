@@ -7762,11 +7762,11 @@ var _user$project$Field$getStatusClass = function (status) {
 	var _p0 = status;
 	switch (_p0.ctor) {
 		case 'None':
-			return _elm_lang$html$Html_Attributes$class('');
+			return _elm_lang$html$Html_Attributes$class('row');
 		case 'Success':
-			return _elm_lang$html$Html_Attributes$class('has-success');
+			return _elm_lang$html$Html_Attributes$class('row has-success');
 		default:
-			return _elm_lang$html$Html_Attributes$class('has-error');
+			return _elm_lang$html$Html_Attributes$class('row has-error');
 	}
 };
 var _user$project$Field$Field = F4(
@@ -7874,14 +7874,32 @@ var _user$project$Field$view = function (field) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$label,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text(field.label)
+						_elm_lang$html$Html_Attributes$class('column')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(field.label)
+							]))
 					])),
-				_user$project$Field$fieldTemplate(field)
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Field$fieldTemplate(field)
+					]))
 			]));
 };
 

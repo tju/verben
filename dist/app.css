@@ -471,7 +471,7 @@ body {
   }
 }
 .has-error .result {
-  padding-bottom: 1.5em;
+  margin-bottom: 1.5em;
 }
 .has-error .result span.entered {
   color: red;
@@ -486,7 +486,7 @@ body {
   padding-right: 1.5em;
 }
 .has-success .result {
-  padding-bottom: 1.5em;
+  margin-bottom: 1.5em;
 }
 .has-success .result span.entered {
   color: green;

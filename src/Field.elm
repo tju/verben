@@ -31,8 +31,10 @@ type Msg
 view : Field -> Html Msg
 view field =
     div [ getStatusClass field.status ]
-        [ label [] [ text field.label ]
-        , fieldTemplate field
+        [ div [ class "column" ]
+            [ label [ ] [ text field.label ]]
+        , div [ class "column" ]
+            [ fieldTemplate field ]
         ]
 
 
@@ -42,13 +44,13 @@ fieldTemplate field =
             input [ type' "text", onInput SetField, value field.entered ] []
 
         Error ->
-            div [ class "result"]
+            div [ class "result" ]
                 [ span [ class "expected" ] [ text field.expected ]
                 , span [ class "entered" ] [ text field.entered ]
                 ]
 
         Success ->
-            div [ class "result"]
+            div [ class "result" ]
                 [ span [ class "entered" ] [ text field.entered ]
                 ]
 
@@ -57,13 +59,13 @@ getStatusClass : ValidationStatus -> Html.Attribute Msg
 getStatusClass status =
     case status of
         None ->
-            class ""
+            class "row"
 
         Success ->
-            class "has-success"
+            class "row has-success"
 
         Error ->
-            class "has-error"
+            class "row has-error"
 
 
 
