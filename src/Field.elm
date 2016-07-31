@@ -32,7 +32,7 @@ view : Field -> Html Msg
 view field =
     div [ getStatusClass field.status ]
         [ div [ class "column" ]
-            [ label [ ] [ text field.label ]]
+            [ label [] [ text field.label ] ]
         , div [ class "column" ]
             [ fieldTemplate field ]
         ]

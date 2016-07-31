@@ -5,7 +5,7 @@ import Html.App as App
 import Html.Events exposing (onInput, onClick)
 import Field
 import Data exposing (..)
-import Html.Attributes exposing (type', action, class, method, href)
+import Html.Attributes exposing (type', action, class, method, href, disabled)
 
 
 -- main =
@@ -127,16 +127,17 @@ view model =
                     , App.map F2Msg (Field.view model.f2)
                     , App.map F3Msg (Field.view model.f3)
                     ]
-                , checkButton model.checked
+                , div [ class "row " ] [ div [ class "column" ] [ checkButton model ] ]
                 ]
 
 
-checkButton checked =
-    if checked then
+checkButton form =
+    if form.checked then
         text ""
     else
         button
             [ type' "button"
+            , disabled <| form.f1.entered == "" || form.f2.entered == "" || form.f3.entered == ""
             , class "button"
             , onClick Check
             ]
