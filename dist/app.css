@@ -470,6 +470,9 @@ body {
     width: 90%;
   }
 }
+input {
+  margin-bottom: 1.5em;
+}
 .has-error .result {
   margin-bottom: 1.5em;
 }
