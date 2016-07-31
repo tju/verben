@@ -7933,6 +7933,8 @@ var _user$project$Form$initialForm = function (data) {
 		checked: false
 	};
 };
+var _user$project$Form$emptyForm = _user$project$Form$initialForm(
+	A5(_user$project$Data$Data, '', '', '', '', 0));
 var _user$project$Form$Form = F6(
 	function (a, b, c, d, e, f) {
 		return {f1: a, f2: b, f3: c, infinitiv: d, score: e, checked: f};
@@ -8052,65 +8054,7 @@ var _user$project$Form$checkButton = function (checked) {
 			]));
 };
 
-var _user$project$App$emptyForm = _user$project$Form$initialForm(
-	A5(_user$project$Data$Data, '', '', '', '', 0));
-var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$App$emptyForm, isFormVisible: true};
-var _user$project$App$getNextForm = function (app) {
-	var _p0 = app.dataStore;
-	if (_p0.ctor === '[]') {
-		return {
-			ctor: '_Tuple2',
-			_0: _user$project$App$emptyForm,
-			_1: _elm_lang$core$Native_List.fromArray(
-				[])
-		};
-	} else {
-		var _p2 = _p0._1;
-		var _p1 = _p0._0;
-		return app.isFormVisible ? {
-			ctor: '_Tuple2',
-			_0: _user$project$Form$initialForm(_p1),
-			_1: _p2
-		} : {
-			ctor: '_Tuple2',
-			_0: _user$project$Form$initialForm(_p1),
-			_1: A2(
-				_elm_lang$core$List$append,
-				_p2,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_user$project$Form$getData(app.form)
-					]))
-		};
-	}
-};
-var _user$project$App$update = F2(
-	function (msg, app) {
-		var _p3 = msg;
-		if (_p3.ctor === 'FormMsg') {
-			return _elm_lang$core$Native_Utils.update(
-				app,
-				{
-					form: A2(_user$project$Form$update, _p3._0, app.form)
-				});
-		} else {
-			var _p4 = _user$project$App$getNextForm(app);
-			var newForm = _p4._0;
-			var ds = _p4._1;
-			return _elm_lang$core$Native_Utils.update(
-				app,
-				{form: newForm, dataStore: ds, isFormVisible: false});
-		}
-	});
-var _user$project$App$AppModel = F3(
-	function (a, b, c) {
-		return {dataStore: a, form: b, isFormVisible: c};
-	});
-var _user$project$App$Next = {ctor: 'Next'};
-var _user$project$App$FormMsg = function (a) {
-	return {ctor: 'FormMsg', _0: a};
-};
-var _user$project$App$view = function (model) {
+var _user$project$Profile$view = function (profile) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8120,37 +8064,194 @@ var _user$project$App$view = function (model) {
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
 					[
-						A2(
-						_elm_lang$html$Html_App$map,
-						_user$project$App$FormMsg,
-						_user$project$Form$view(model.form))
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('footer text-center'),
-						_elm_lang$html$Html_Attributes$type$('button'),
-						_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+						_elm_lang$html$Html_Attributes$class('row')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
-						_elm_lang$html$Html$a,
+						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$class('btn btn-primary btn-lg'),
-								_elm_lang$html$Html_Attributes$href('#pablo')
+								_elm_lang$html$Html_Attributes$class('column col-center')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html$text('NEXT')
+								A2(
+								_elm_lang$html$Html$img,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('profilePic'),
+										_elm_lang$html$Html_Attributes$src(profile.picUrl)
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[]))
+							])),
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('column')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$h5,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(profile.name)
+									])),
+								A2(
+								_elm_lang$html$Html$h3,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'Level',
+											_elm_lang$core$Basics$toString(profile.level)))
+									]))
 							]))
 					]))
 			]));
+};
+var _user$project$Profile$Profile = F3(
+	function (a, b, c) {
+		return {name: a, picUrl: b, level: c};
+	});
+var _user$project$Profile$initialProfile = A3(_user$project$Profile$Profile, 'ninja123', 'http://www.ninjasoftware.net/images/NinjaSoftware.png', 0);
+
+var _user$project$App$getNextForm = function (app) {
+	var _p0 = app.dataStore;
+	if (_p0.ctor === '[]') {
+		return {
+			ctor: '_Tuple2',
+			_0: _user$project$Form$emptyForm,
+			_1: _elm_lang$core$Native_List.fromArray(
+				[])
+		};
+	} else {
+		var _p3 = _p0._1;
+		var _p2 = _p0._0;
+		var _p1 = app.appMode;
+		if (_p1.ctor === 'ShowProfile') {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$Form$initialForm(_p2),
+				_1: _p3
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$Form$initialForm(_p2),
+				_1: A2(
+					_elm_lang$core$List$append,
+					_p3,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_user$project$Form$getData(app.form)
+						]))
+			};
+		}
+	}
+};
+var _user$project$App$AppModel = F4(
+	function (a, b, c, d) {
+		return {dataStore: a, form: b, appMode: c, profile: d};
+	});
+var _user$project$App$PlayLevel = {ctor: 'PlayLevel'};
+var _user$project$App$update = F2(
+	function (msg, app) {
+		var _p4 = msg;
+		if (_p4.ctor === 'FormMsg') {
+			return _elm_lang$core$Native_Utils.update(
+				app,
+				{
+					form: A2(_user$project$Form$update, _p4._0, app.form)
+				});
+		} else {
+			var _p5 = _user$project$App$getNextForm(app);
+			var newForm = _p5._0;
+			var ds = _p5._1;
+			return _elm_lang$core$Native_Utils.update(
+				app,
+				{form: newForm, dataStore: ds, appMode: _user$project$App$PlayLevel});
+		}
+	});
+var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
+var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$Form$emptyForm, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile};
+var _user$project$App$Next = {ctor: 'Next'};
+var _user$project$App$FormMsg = function (a) {
+	return {ctor: 'FormMsg', _0: a};
+};
+var _user$project$App$view = function (app) {
+	var _p6 = app.appMode;
+	if (_p6.ctor === 'ShowProfile') {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$Profile$view(app.profile),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('row')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('button start-button'),
+									_elm_lang$html$Html_Attributes$type$('button'),
+									_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Start')
+								]))
+						]))
+				]));
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html_App$map,
+							_user$project$App$FormMsg,
+							_user$project$Form$view(app.form))
+						])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('button start-button'),
+							_elm_lang$html$Html_Attributes$type$('button'),
+							_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('NEXT')
+						]))
+				]));
+	}
 };
 var _user$project$App$main = {
 	main: _elm_lang$html$Html_App$beginnerProgram(

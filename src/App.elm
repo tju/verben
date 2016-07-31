@@ -7,6 +7,7 @@ import Html.Attributes exposing (type', action, class, method, href)
 import DataStore exposing (..)
 import Form exposing (..)
 import Data exposing (..)
+import Profile exposing (..)
 
 
 main =
@@ -17,32 +18,35 @@ main =
         }
 
 
+type AppMode
+    = ShowProfile
+    | PlayLevel
+
+
 type alias AppModel =
     { dataStore : List Data
     , form : Form.Form
-    , isFormVisible : Bool
+    , appMode : AppMode
+    , profile : Profile
     }
-
-
-emptyForm =
-    Form.initialForm (Data "" "" "" "" 0)
 
 
 initialAppModel : AppModel
 initialAppModel =
     { dataStore = getDataStore
-    , form = emptyForm
-    , isFormVisible = True
+    , form = Form.emptyForm
+    , appMode = ShowProfile
+    , profile = Profile.initialProfile
     }
+
+
+
+-- UPDATE
 
 
 type Msg
     = FormMsg Form.Msg
     | Next
-
-
-
--- UPDATE
 
 
 update msg app =
@@ -58,7 +62,7 @@ update msg app =
                 { app
                     | form = newForm
                     , dataStore = ds
-                    , isFormVisible = False
+                    , appMode = PlayLevel
                 }
 
 
@@ -69,25 +73,40 @@ getNextForm app =
             ( emptyForm, [] )
 
         h :: t ->
-            if app.isFormVisible then
-                ( initialForm h, t )
-            else
-                ( initialForm h, List.append t [ (Form.getData app.form) ] )
+            case app.appMode of
+                ShowProfile ->
+                    ( initialForm h, t )
+
+                PlayLevel ->
+                    ( initialForm h, List.append t [ (Form.getData app.form) ] )
 
 
 
 -- VIEW
 
 
-view model =
-    div []
-        [ div [] [ App.map FormMsg (Form.view model.form) ]
-        , div
-            [ class "footer text-center"
-            , type' "button"
-            , onClick Next
-            ]
-            [ a [ class "btn btn-primary btn-lg", href "#pablo" ]
-                [ text "NEXT" ]
-            ]
-        ]
+view app =
+    case app.appMode of
+        ShowProfile ->
+            div []
+                [ Profile.view app.profile
+                , div [ class "row" ]
+                    [ button
+                        [ class "button start-button"
+                        , type' "button"
+                        , onClick Next
+                        ]
+                        [ text "Start" ]
+                    ]
+                ]
+
+        PlayLevel ->
+            div []
+                [ div [] [ App.map FormMsg (Form.view app.form) ]
+                , div
+                    [ class "button start-button"
+                    , type' "button"
+                    , onClick Next
+                    ]
+                    [ text "NEXT" ]
+                ]

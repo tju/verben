@@ -27,6 +27,10 @@ type alias Form =
     }
 
 
+emptyForm =
+    initialForm (Data "" "" "" "" 0)
+
+
 initialForm : Data -> Form
 initialForm data =
     { f1 = Field.Field "Präsens (3. Person Singular)" data.f1 "" Field.None
