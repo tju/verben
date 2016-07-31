@@ -7758,9 +7758,43 @@ var _user$project$DataStore$getDataStore = _elm_lang$core$Native_List.fromArray(
 		{infinitiv: 'haben', f1: 'hat', f2: 'hatte', f3: 'hat gehabt', score: 0}
 	]);
 
+var _user$project$Field$onKeyUp = function (options) {
+	var filter = F2(
+		function (optionsToCheck, code) {
+			filter:
+			while (true) {
+				var _p0 = optionsToCheck;
+				if (_p0.ctor === '[]') {
+					return _elm_lang$core$Result$Err('key code is not in the list');
+				} else {
+					if (_elm_lang$core$Native_Utils.eq(_p0._0._0, code)) {
+						return _elm_lang$core$Result$Ok(_p0._0._1);
+					} else {
+						var _v1 = _p0._1,
+							_v2 = code;
+						optionsToCheck = _v1;
+						code = _v2;
+						continue filter;
+					}
+				}
+			}
+		});
+	var keyCodes = A2(
+		_elm_lang$core$Json_Decode$customDecoder,
+		_elm_lang$html$Html_Events$keyCode,
+		filter(options));
+	return A2(_elm_lang$html$Html_Events$on, 'keyup', keyCodes);
+};
+var _user$project$Field$onEnter = function (enter) {
+	return _user$project$Field$onKeyUp(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 13, _1: enter}
+			]));
+};
 var _user$project$Field$getStatusClass = function (status) {
-	var _p0 = status;
-	switch (_p0.ctor) {
+	var _p1 = status;
+	switch (_p1.ctor) {
 		case 'None':
 			return _elm_lang$html$Html_Attributes$class('row');
 		case 'Success':
@@ -7781,32 +7815,37 @@ var _user$project$Field$checkStatus = function (field) {
 var _user$project$Field$None = {ctor: 'None'};
 var _user$project$Field$update = F2(
 	function (msg, field) {
-		var _p1 = msg;
-		if (_p1.ctor === 'SetField') {
-			return _elm_lang$core$Native_Utils.update(
-				field,
-				{entered: _p1._0, status: _user$project$Field$None});
-		} else {
-			return _elm_lang$core$Native_Utils.update(
-				field,
-				{
-					status: _user$project$Field$checkStatus(field)
-				});
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'SetField':
+				return _elm_lang$core$Native_Utils.update(
+					field,
+					{entered: _p2._0, status: _user$project$Field$None});
+			case 'Check':
+				return _elm_lang$core$Native_Utils.update(
+					field,
+					{
+						status: _user$project$Field$checkStatus(field)
+					});
+			default:
+				return field;
 		}
 	});
+var _user$project$Field$Enter = {ctor: 'Enter'};
 var _user$project$Field$Check = {ctor: 'Check'};
 var _user$project$Field$SetField = function (a) {
 	return {ctor: 'SetField', _0: a};
 };
 var _user$project$Field$fieldTemplate = function (field) {
-	var _p2 = field.status;
-	switch (_p2.ctor) {
+	var _p3 = field.status;
+	switch (_p3.ctor) {
 		case 'None':
 			return A2(
 				_elm_lang$html$Html$input,
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$type$('text'),
+						_user$project$Field$onEnter(_user$project$Field$Enter),
 						_elm_lang$html$Html_Events$onInput(_user$project$Field$SetField),
 						_elm_lang$html$Html_Attributes$value(field.entered)
 					]),
@@ -7906,18 +7945,21 @@ var _user$project$Field$view = function (field) {
 var _user$project$Form$hasErrors = function (form) {
 	return (_elm_lang$core$Native_Utils.eq(form.f1.status, _user$project$Field$Success) && (_elm_lang$core$Native_Utils.eq(form.f2.status, _user$project$Field$Success) && _elm_lang$core$Native_Utils.eq(form.f3.status, _user$project$Field$Success))) ? false : true;
 };
+var _user$project$Form$checkForm = function (model) {
+	var score = _user$project$Form$hasErrors(model) ? (model.score - 1) : (model.score + 1);
+	var f3 = A2(_user$project$Field$update, _user$project$Field$Check, model.f3);
+	var f2 = A2(_user$project$Field$update, _user$project$Field$Check, model.f2);
+	var f1 = A2(_user$project$Field$update, _user$project$Field$Check, model.f1);
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{f1: f1, f2: f2, f3: f3, score: score, checked: true});
+};
 var _user$project$Form$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Check':
-				var score = _user$project$Form$hasErrors(model) ? (model.score - 1) : (model.score + 1);
-				var f3 = A2(_user$project$Field$update, _user$project$Field$Check, model.f3);
-				var f2 = A2(_user$project$Field$update, _user$project$Field$Check, model.f2);
-				var f1 = A2(_user$project$Field$update, _user$project$Field$Check, model.f1);
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{f1: f1, f2: f2, f3: f3, score: score, checked: true});
+				return _user$project$Form$checkForm(model);
 			case 'F1Msg':
 				return _elm_lang$core$Native_Utils.update(
 					model,
@@ -7931,11 +7973,15 @@ var _user$project$Form$update = F2(
 						f2: A2(_user$project$Field$update, _p0._0, model.f2)
 					});
 			default:
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						f3: A2(_user$project$Field$update, _p0._0, model.f3)
-					});
+				if (_p0._0.ctor === 'Enter') {
+					return _user$project$Form$checkForm(model);
+				} else {
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							f3: A2(_user$project$Field$update, _p0._0, model.f3)
+						});
+				}
 		}
 	});
 var _user$project$Form$getData = function (form) {

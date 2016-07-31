@@ -66,38 +66,44 @@ type Msg
 update msg model =
     case msg of
         Check ->
-            let
-                f1 =
-                    Field.update Field.Check model.f1
-
-                f2 =
-                    Field.update Field.Check model.f2
-
-                f3 =
-                    Field.update Field.Check model.f3
-
-                score =
-                    if hasErrors model then
-                        model.score - 1
-                    else
-                        model.score + 1
-            in
-                { model
-                    | f1 = f1
-                    , f2 = f2
-                    , f3 = f3
-                    , score = score
-                    , checked = True
-                }
-
+            checkForm model
         F1Msg msg ->
             { model | f1 = Field.update msg model.f1 }
 
         F2Msg msg ->
             { model | f2 = Field.update msg model.f2 }
 
+        F3Msg Field.Enter ->
+            checkForm model
+
         F3Msg msg ->
             { model | f3 = Field.update msg model.f3 }
+
+
+checkForm model =
+    let
+        f1 =
+            Field.update Field.Check model.f1
+
+        f2 =
+            Field.update Field.Check model.f2
+
+        f3 =
+            Field.update Field.Check model.f3
+
+        score =
+            if hasErrors model then
+                model.score - 1
+            else
+                model.score + 1
+    in
+        { model
+            | f1 = f1
+            , f2 = f2
+            , f3 = f3
+            , score = score
+            , checked = True
+        }
 
 
 hasErrors : Form -> Bool

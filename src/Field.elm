@@ -2,7 +2,8 @@ module Field exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput, onClick)
+import Html.Events exposing (onInput, onClick, on, keyCode)
+import Json.Decode exposing (customDecoder)
 
 
 type alias Field =
@@ -22,7 +23,7 @@ type ValidationStatus
 type Msg
     = SetField String
     | Check
-
+    | Enter
 
 
 -- VIEW
@@ -41,7 +42,13 @@ view field =
 fieldTemplate field =
     case field.status of
         None ->
-            input [ type' "text", onInput SetField, value field.entered ] []
+            input
+                [ type' "text"
+                , onEnter Enter
+                , onInput SetField
+                , value field.entered
+                ]
+                []
 
         Error ->
             div [ class "result" ]
@@ -81,6 +88,9 @@ update msg field =
         Check ->
             { field | status = checkStatus field }
 
+        Enter ->
+            field
+
 
 checkStatus : Field -> ValidationStatus
 checkStatus field =
@@ -88,3 +98,26 @@ checkStatus field =
         Success
     else
         Error
+
+
+onEnter enter =
+    onKeyUp [ ( 13, enter ) ]
+
+
+onKeyUp options =
+    let
+        filter optionsToCheck code =
+            case optionsToCheck of
+                [] ->
+                    Err "key code is not in the list"
+
+                ( c, msg ) :: rest ->
+                    if (c == code) then
+                        Ok msg
+                    else
+                        filter rest code
+
+        keyCodes =
+            customDecoder keyCode (filter options)
+    in
+        on "keyup" keyCodes
