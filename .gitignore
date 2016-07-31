@@ -2,4 +2,6 @@
 elm-stuff/
 # elm-repl generated files
 repl-temp-*
-__old
+
+
+node_modules/
