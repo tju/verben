@@ -6,13 +6,15 @@
   "dependencies": {},
   "devDependencies": {
     "elm": "^0.17.1",
-    "http-server": "^0.9.0"
+    "http-server": "^0.9.0",
+    "less": "^2.7.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:js": "elm make src/App.elm --output dist/app.js",
     "build:html": "cp src/index.html dist/index.html",
-    "build": "npm run build:js && npm run build:html",
+    "build:css": "lessc style/app.less dist/app.css",
+    "build": "npm run build:js && npm run build:html && npm run build:css",
     "serve": "http-server dist"
   },
   "repository": {
