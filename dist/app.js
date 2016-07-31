@@ -8054,7 +8054,7 @@ var _user$project$Form$checkButton = function (checked) {
 
 var _user$project$App$emptyForm = _user$project$Form$initialForm(
 	A5(_user$project$Data$Data, '', '', '', '', 0));
-var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$App$emptyForm, initialState: true};
+var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$App$emptyForm, isFormVisible: true};
 var _user$project$App$getNextForm = function (app) {
 	var _p0 = app.dataStore;
 	if (_p0.ctor === '[]') {
@@ -8067,7 +8067,7 @@ var _user$project$App$getNextForm = function (app) {
 	} else {
 		var _p2 = _p0._1;
 		var _p1 = _p0._0;
-		return app.initialState ? {
+		return app.isFormVisible ? {
 			ctor: '_Tuple2',
 			_0: _user$project$Form$initialForm(_p1),
 			_1: _p2
@@ -8099,12 +8099,12 @@ var _user$project$App$update = F2(
 			var ds = _p4._1;
 			return _elm_lang$core$Native_Utils.update(
 				app,
-				{form: newForm, dataStore: ds, initialState: false});
+				{form: newForm, dataStore: ds, isFormVisible: false});
 		}
 	});
 var _user$project$App$AppModel = F3(
 	function (a, b, c) {
-		return {dataStore: a, form: b, initialState: c};
+		return {dataStore: a, form: b, isFormVisible: c};
 	});
 var _user$project$App$Next = {ctor: 'Next'};
 var _user$project$App$FormMsg = function (a) {

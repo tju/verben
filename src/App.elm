@@ -1,26 +1,26 @@
 module App exposing (..)
 
-import DataStore exposing (..)
-import Form exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.App as App
 import Html.Attributes exposing (type', action, class, method, href)
+import DataStore exposing (..)
+import Form exposing (..)
 import Data exposing (..)
 
 
--- main =
---     App.beginnerProgram
---         { model = initialModel
---         , view = view
---         , update = update
---         }
+main =
+    App.beginnerProgram
+        { model = initialAppModel
+        , view = view
+        , update = update
+        }
 
 
 type alias AppModel =
     { dataStore : List Data
     , form : Form.Form
-    , initialState : Bool
+    , isFormVisible : Bool
     }
 
 
@@ -32,7 +32,7 @@ initialAppModel : AppModel
 initialAppModel =
     { dataStore = getDataStore
     , form = emptyForm
-    , initialState = True
+    , isFormVisible = True
     }
 
 
@@ -58,7 +58,7 @@ update msg app =
                 { app
                     | form = newForm
                     , dataStore = ds
-                    , initialState = False
+                    , isFormVisible = False
                 }
 
 
@@ -69,7 +69,7 @@ getNextForm app =
             ( emptyForm, [] )
 
         h :: t ->
-            if app.initialState then
+            if app.isFormVisible then
                 ( initialForm h, t )
             else
                 ( initialForm h, List.append t [ (Form.getData app.form) ] )
@@ -91,29 +91,3 @@ view model =
                 [ text "NEXT" ]
             ]
         ]
-
-
-
--- nextButton model =
---     if model.initialState then
---         button
---             [ type' "button"
---             , onClick Next
---             ]
---             [ text "Start" ]
---     else if model.form.checked then
---         button
---             [ type' "button"
---             , onClick Next
---             ]
---             [ text "Next" ]
---     else
---         text ""
-
-
-main =
-    App.beginnerProgram
-        { model = initialAppModel
-        , view = view
-        , update = update
-        }

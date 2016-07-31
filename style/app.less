@@ -1,3 +1,43 @@
-body{
-    background-color: lightgoldenrodyellow;
+@import (inline) "../node_modules/normalize.css/normalize.css";
+@import (inline) "../node_modules/milligram/dist/milligram.min.css";
+
+h1,h2,h3,h4,h5,h6,strong{
+    color: #333;
+    font-family: Cutive, Georgia, serif;
+}
+body {
+    font-family: Roboto, sans-serif;
+    background: #e2e1e0;
+}
+.button:focus{
+    background-color: #9b4dca;
+    border-color: white;
+}
+.button:active{
+    background-color: #333;
+}
+
+.profilePic{
+    height: 64px;
+    width: 64px;
+    border-radius: 100%;
+    margin: 16px auto;
+    display: block;
+}
+
+.container{
+    max-width: 60rem;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.start-button{
+    margin: 16px auto;
+    display: block;
+}
+
+@media (max-width: 40rem){
+    .container{
+        width: 90%;
+    }
 }

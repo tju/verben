@@ -120,11 +120,11 @@ view model =
                         [ text "Unregelmäßige Verben" ]
                     , h2 [] [ text str ]
                     ]
-                    , div [ class "content" ]
-                        [ App.map F1Msg (Field.view model.f1)
-                        , App.map F2Msg (Field.view model.f2)
-                        , App.map F3Msg (Field.view model.f3)
-                        ]
+                , div [ class "content" ]
+                    [ App.map F1Msg (Field.view model.f1)
+                    , App.map F2Msg (Field.view model.f2)
+                    , App.map F3Msg (Field.view model.f3)
+                    ]
                 , div
                     [ class "footer text-center"
                     , type' "button"
@@ -134,8 +134,6 @@ view model =
                         [ text "Check" ]
                     ]
                 ]
-                    
-                
 
 
 
