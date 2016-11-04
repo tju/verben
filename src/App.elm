@@ -12,14 +12,6 @@ import Level
 import VirtualDom
 
 
-main =
-    App.beginnerProgram
-        { model = initialAppModel
-        , view = view
-        , update = update
-        }
-
-
 type AppMode
     = ShowProfile
     | PlayLevel
@@ -35,13 +27,15 @@ type alias Model =
     }
 
 
-initialAppModel : Model
-initialAppModel =
-    { dataStore = getDataStore
-    , level = Level.init
-    , appMode = ShowProfile
-    , profile = Profile.initialProfile
-    }
+init : ( Model, Cmd Msg )
+init =
+    ( { dataStore = getDataStore
+      , level = Level.init
+      , appMode = ShowProfile
+      , profile = Profile.initialProfile
+      }
+    , Cmd.none
+    )
 
 
 
@@ -53,16 +47,19 @@ type Msg
     | LevelMsg Level.Msg
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         StartLevel ->
-            { model | appMode = PlayLevel }
+            ( { model | appMode = PlayLevel }, Cmd.none )
 
         LevelMsg lmsg ->
-            { model
+            ( { model
                 | level = Level.update lmsg model.level
-                }
+              }
+            , Cmd.none
+            )
+
 
 
 -- VIEW
@@ -86,3 +83,21 @@ view app =
 
         PlayLevel ->
             div [] [ App.map LevelMsg (Level.view app.level) ]
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
+main =
+    App.program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }

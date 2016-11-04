@@ -8424,6 +8424,9 @@ var _user$project$Level$view = function (model) {
 			]));
 };
 
+var _user$project$App$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
 var _user$project$App$Model = F4(
 	function (a, b, c, d) {
 		return {dataStore: a, level: b, appMode: c, profile: d};
@@ -8433,19 +8436,31 @@ var _user$project$App$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		if (_p0.ctor === 'StartLevel') {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{appMode: _user$project$App$PlayLevel});
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{appMode: _user$project$App$PlayLevel}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
 		} else {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{
-					level: A2(_user$project$Level$update, _p0._0, model.level)
-				});
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						level: A2(_user$project$Level$update, _p0._0, model.level)
+					}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
 		}
 	});
 var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
-var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, level: _user$project$Level$init, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile};
+var _user$project$App$init = {
+	ctor: '_Tuple2',
+	_0: {dataStore: _user$project$DataStore$getDataStore, level: _user$project$Level$init, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
 var _user$project$App$LevelMsg = function (a) {
 	return {ctor: 'LevelMsg', _0: a};
 };
@@ -8497,8 +8512,8 @@ var _user$project$App$view = function (app) {
 	}
 };
 var _user$project$App$main = {
-	main: _elm_lang$html$Html_App$beginnerProgram(
-		{model: _user$project$App$initialAppModel, view: _user$project$App$view, update: _user$project$App$update})
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$App$init, view: _user$project$App$view, update: _user$project$App$update, subscriptions: _user$project$App$subscriptions})
 };
 
 var Elm = {};
