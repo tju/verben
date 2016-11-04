@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (type', action, class, method, href, src)
 
 
-type alias Profile =
+type alias Model =
     { name : String
     , picUrl : String
     , level : Int
@@ -12,7 +12,7 @@ type alias Profile =
 
 
 initialProfile =
-    Profile "ninja123" "http://www.ninjasoftware.net/images/NinjaSoftware.png" 0
+    Model "ninja123" "http://www.ninjasoftware.net/images/NinjaSoftware.png" 0
 
 
 view profile =

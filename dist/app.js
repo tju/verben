@@ -2452,22 +2452,124 @@ var _elm_lang$core$List$intersperse = F2(
 			return A2(_elm_lang$core$List_ops['::'], _p21._0, spersed);
 		}
 	});
-var _elm_lang$core$List$take = F2(
+var _elm_lang$core$List$takeReverse = F3(
+	function (n, list, taken) {
+		takeReverse:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return taken;
+			} else {
+				var _p22 = list;
+				if (_p22.ctor === '[]') {
+					return taken;
+				} else {
+					var _v23 = n - 1,
+						_v24 = _p22._1,
+						_v25 = A2(_elm_lang$core$List_ops['::'], _p22._0, taken);
+					n = _v23;
+					list = _v24;
+					taken = _v25;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var _elm_lang$core$List$takeTailRec = F2(
 	function (n, list) {
+		return _elm_lang$core$List$reverse(
+			A3(
+				_elm_lang$core$List$takeReverse,
+				n,
+				list,
+				_elm_lang$core$Native_List.fromArray(
+					[])));
+	});
+var _elm_lang$core$List$takeFast = F3(
+	function (ctr, n, list) {
 		if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
 			return _elm_lang$core$Native_List.fromArray(
 				[]);
 		} else {
-			var _p22 = list;
-			if (_p22.ctor === '[]') {
-				return list;
-			} else {
-				return A2(
-					_elm_lang$core$List_ops['::'],
-					_p22._0,
-					A2(_elm_lang$core$List$take, n - 1, _p22._1));
-			}
+			var _p23 = {ctor: '_Tuple2', _0: n, _1: list};
+			_v26_5:
+			do {
+				_v26_1:
+				do {
+					if (_p23.ctor === '_Tuple2') {
+						if (_p23._1.ctor === '[]') {
+							return list;
+						} else {
+							if (_p23._1._1.ctor === '::') {
+								switch (_p23._0) {
+									case 1:
+										break _v26_1;
+									case 2:
+										return _elm_lang$core$Native_List.fromArray(
+											[_p23._1._0, _p23._1._1._0]);
+									case 3:
+										if (_p23._1._1._1.ctor === '::') {
+											return _elm_lang$core$Native_List.fromArray(
+												[_p23._1._0, _p23._1._1._0, _p23._1._1._1._0]);
+										} else {
+											break _v26_5;
+										}
+									default:
+										if ((_p23._1._1._1.ctor === '::') && (_p23._1._1._1._1.ctor === '::')) {
+											var _p28 = _p23._1._1._1._0;
+											var _p27 = _p23._1._1._0;
+											var _p26 = _p23._1._0;
+											var _p25 = _p23._1._1._1._1._0;
+											var _p24 = _p23._1._1._1._1._1;
+											return (_elm_lang$core$Native_Utils.cmp(ctr, 1000) > 0) ? A2(
+												_elm_lang$core$List_ops['::'],
+												_p26,
+												A2(
+													_elm_lang$core$List_ops['::'],
+													_p27,
+													A2(
+														_elm_lang$core$List_ops['::'],
+														_p28,
+														A2(
+															_elm_lang$core$List_ops['::'],
+															_p25,
+															A2(_elm_lang$core$List$takeTailRec, n - 4, _p24))))) : A2(
+												_elm_lang$core$List_ops['::'],
+												_p26,
+												A2(
+													_elm_lang$core$List_ops['::'],
+													_p27,
+													A2(
+														_elm_lang$core$List_ops['::'],
+														_p28,
+														A2(
+															_elm_lang$core$List_ops['::'],
+															_p25,
+															A3(_elm_lang$core$List$takeFast, ctr + 1, n - 4, _p24)))));
+										} else {
+											break _v26_5;
+										}
+								}
+							} else {
+								if (_p23._0 === 1) {
+									break _v26_1;
+								} else {
+									break _v26_5;
+								}
+							}
+						}
+					} else {
+						break _v26_5;
+					}
+				} while(false);
+				return _elm_lang$core$Native_List.fromArray(
+					[_p23._1._0]);
+			} while(false);
+			return list;
 		}
+	});
+var _elm_lang$core$List$take = F2(
+	function (n, list) {
+		return A3(_elm_lang$core$List$takeFast, 0, n, list);
 	});
 var _elm_lang$core$List$repeatHelp = F3(
 	function (result, n, value) {
@@ -2476,12 +2578,12 @@ var _elm_lang$core$List$repeatHelp = F3(
 			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
 				return result;
 			} else {
-				var _v23 = A2(_elm_lang$core$List_ops['::'], value, result),
-					_v24 = n - 1,
-					_v25 = value;
-				result = _v23;
-				n = _v24;
-				value = _v25;
+				var _v27 = A2(_elm_lang$core$List_ops['::'], value, result),
+					_v28 = n - 1,
+					_v29 = value;
+				result = _v27;
+				n = _v28;
+				value = _v29;
 				continue repeatHelp;
 			}
 		}
@@ -2856,7 +2958,10 @@ function work()
 	var process;
 	while (numSteps < MAX_STEPS && (process = workQueue.shift()))
 	{
-		numSteps = step(numSteps, process);
+		if (process.root)
+		{
+			numSteps = step(numSteps, process);
+		}
 	}
 	if (!process)
 	{
@@ -3405,17 +3510,40 @@ var incomingPortMap = F2(function subMap(tagger, finalTagger)
 
 function setupIncomingPort(name, callback)
 {
+	var sentBeforeInit = [];
 	var subs = _elm_lang$core$Native_List.Nil;
 	var converter = effectManagers[name].converter;
+	var currentOnEffects = preInitOnEffects;
+	var currentSend = preInitSend;
 
 	// CREATE MANAGER
 
 	var init = _elm_lang$core$Native_Scheduler.succeed(null);
 
-	function onEffects(router, subList, state)
+	function preInitOnEffects(router, subList, state)
+	{
+		var postInitResult = postInitOnEffects(router, subList, state);
+
+		for(var i = 0; i < sentBeforeInit.length; i++)
+		{
+			postInitSend(sentBeforeInit[i]);
+		}
+
+		sentBeforeInit = null; // to release objects held in queue
+		currentSend = postInitSend;
+		currentOnEffects = postInitOnEffects;
+		return postInitResult;
+	}
+
+	function postInitOnEffects(router, subList, state)
 	{
 		subs = subList;
 		return init;
+	}
+
+	function onEffects(router, subList, state)
+	{
+		return currentOnEffects(router, subList, state);
 	}
 
 	effectManagers[name].init = init;
@@ -3423,9 +3551,14 @@ function setupIncomingPort(name, callback)
 
 	// PUBLIC API
 
-	function send(value)
+	function preInitSend(value)
 	{
-		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, value);
+		sentBeforeInit.push(value);
+	}
+
+	function postInitSend(incomingValue)
+	{
+		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
 		if (result.ctor === 'Err')
 		{
 			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
@@ -3438,6 +3571,11 @@ function setupIncomingPort(name, callback)
 			callback(temp._0(value));
 			temp = temp._1;
 		}
+	}
+
+	function send(incomingValue)
+	{
+		currentSend(incomingValue);
 	}
 
 	return { send: send };
@@ -3462,6 +3600,7 @@ return {
 };
 
 }();
+
 var _elm_lang$core$Platform$hack = _elm_lang$core$Native_Scheduler.succeed;
 var _elm_lang$core$Platform$sendToSelf = _elm_lang$core$Native_Platform.sendToSelf;
 var _elm_lang$core$Platform$sendToApp = _elm_lang$core$Native_Platform.sendToApp;
@@ -3850,13 +3989,21 @@ function endsWith(sub, str)
 function indexes(sub, str)
 {
 	var subLen = sub.length;
+	
+	if (subLen < 1)
+	{
+		return _elm_lang$core$Native_List.Nil;
+	}
+
 	var i = 0;
 	var is = [];
+
 	while ((i = str.indexOf(sub, i)) > -1)
 	{
 		is.push(i);
 		i = i + subLen;
-	}
+	}	
+	
 	return _elm_lang$core$Native_List.fromArray(is);
 }
 
@@ -3985,6 +4132,7 @@ return {
 };
 
 }();
+
 var _elm_lang$core$String$fromList = _elm_lang$core$Native_String.fromList;
 var _elm_lang$core$String$toList = _elm_lang$core$Native_String.toList;
 var _elm_lang$core$String$toFloat = _elm_lang$core$Native_String.toFloat;
@@ -5209,7 +5357,7 @@ function badToString(problem)
 					+ ':\n\n' + problems.join('\n');
 
 			case 'custom':
-				return 'A `customDecode` failed'
+				return 'A `customDecoder` failed'
 					+ (context === '_' ? '' : ' at ' + context)
 					+ ' with the message: ' + problem.msg;
 
@@ -6960,7 +7108,7 @@ function applyPatch(domNode, patch)
 	switch (patch.type)
 	{
 		case 'p-redraw':
-			return redraw(domNode, patch.data, patch.eventNode);
+			return applyPatchRedraw(domNode, patch.data, patch.eventNode);
 
 		case 'p-facts':
 			applyFacts(domNode, patch.eventNode, patch.data);
@@ -7009,57 +7157,7 @@ function applyPatch(domNode, patch)
 			return domNode;
 
 		case 'p-reorder':
-			var data = patch.data;
-
-			// end inserts
-			var endInserts = data.endInserts;
-			var end;
-			if (typeof endInserts !== 'undefined')
-			{
-				if (endInserts.length === 1)
-				{
-					var insert = endInserts[0];
-					var entry = insert.entry;
-					var end = entry.tag === 'move'
-						? entry.data
-						: render(entry.vnode, patch.eventNode);
-				}
-				else
-				{
-					end = document.createDocumentFragment();
-					for (var i = 0; i < endInserts.length; i++)
-					{
-						var insert = endInserts[i];
-						var entry = insert.entry;
-						var node = entry.tag === 'move'
-							? entry.data
-							: render(entry.vnode, patch.eventNode);
-						end.appendChild(node);
-					}
-				}
-			}
-
-			// removals
-			domNode = applyPatchesHelp(domNode, data.patches);
-
-			// inserts
-			var inserts = data.inserts;
-			for (var i = 0; i < inserts.length; i++)
-			{
-				var insert = inserts[i];
-				var entry = insert.entry;
-				var node = entry.tag === 'move'
-					? entry.data
-					: render(entry.vnode, patch.eventNode);
-				domNode.insertBefore(node, domNode.childNodes[insert.index]);
-			}
-
-			if (typeof end !== 'undefined')
-			{
-				domNode.appendChild(end);
-			}
-
-			return domNode;
+			return applyPatchReorder(domNode, patch);
 
 		case 'p-custom':
 			var impl = patch.data;
@@ -7071,7 +7169,7 @@ function applyPatch(domNode, patch)
 }
 
 
-function redraw(domNode, vNode, eventNode)
+function applyPatchRedraw(domNode, vNode, eventNode)
 {
 	var parentNode = domNode.parentNode;
 	var newNode = render(vNode, eventNode);
@@ -7086,6 +7184,59 @@ function redraw(domNode, vNode, eventNode)
 		parentNode.replaceChild(newNode, domNode);
 	}
 	return newNode;
+}
+
+
+function applyPatchReorder(domNode, patch)
+{
+	var data = patch.data;
+
+	// remove end inserts
+	var frag = applyPatchReorderEndInsertsHelp(data.endInserts, patch);
+
+	// removals
+	domNode = applyPatchesHelp(domNode, data.patches);
+
+	// inserts
+	var inserts = data.inserts;
+	for (var i = 0; i < inserts.length; i++)
+	{
+		var insert = inserts[i];
+		var entry = insert.entry;
+		var node = entry.tag === 'move'
+			? entry.data
+			: render(entry.vnode, patch.eventNode);
+		domNode.insertBefore(node, domNode.childNodes[insert.index]);
+	}
+
+	// add end inserts
+	if (typeof frag !== 'undefined')
+	{
+		domNode.appendChild(frag);
+	}
+
+	return domNode;
+}
+
+
+function applyPatchReorderEndInsertsHelp(endInserts, patch)
+{
+	if (typeof endInserts === 'undefined')
+	{
+		return;
+	}
+
+	var frag = document.createDocumentFragment();
+	for (var i = 0; i < endInserts.length; i++)
+	{
+		var insert = endInserts[i];
+		var entry = insert.entry;
+		frag.appendChild(entry.tag === 'move'
+			? entry.data
+			: render(entry.vnode, patch.eventNode)
+		);
+	}
+	return frag;
 }
 
 
@@ -7946,7 +8097,7 @@ var _user$project$Form$hasErrors = function (form) {
 	return (_elm_lang$core$Native_Utils.eq(form.f1.status, _user$project$Field$Success) && (_elm_lang$core$Native_Utils.eq(form.f2.status, _user$project$Field$Success) && _elm_lang$core$Native_Utils.eq(form.f3.status, _user$project$Field$Success))) ? false : true;
 };
 var _user$project$Form$checkForm = function (model) {
-	var score = _user$project$Form$hasErrors(model) ? (model.score - 1) : (model.score + 1);
+	var score = _user$project$Form$hasErrors(model) ? 0 : (model.score + 1);
 	var f3 = A2(_user$project$Field$update, _user$project$Field$Check, model.f3);
 	var f2 = A2(_user$project$Field$update, _user$project$Field$Check, model.f2);
 	var f1 = A2(_user$project$Field$update, _user$project$Field$Check, model.f1);
@@ -7987,7 +8138,7 @@ var _user$project$Form$update = F2(
 var _user$project$Form$getData = function (form) {
 	return {f1: form.f1.expected, f2: form.f2.expected, f3: form.f3.expected, infinitiv: form.infinitiv, score: form.score};
 };
-var _user$project$Form$initialForm = function (data) {
+var _user$project$Form$init = function (data) {
 	return {
 		f1: A4(_user$project$Field$Field, 'Präsens (3. Person Singular)', data.f1, '', _user$project$Field$None),
 		f2: A4(_user$project$Field$Field, 'Präteritum (3. Person Singular)', data.f2, '', _user$project$Field$None),
@@ -7997,9 +8148,9 @@ var _user$project$Form$initialForm = function (data) {
 		checked: false
 	};
 };
-var _user$project$Form$emptyForm = _user$project$Form$initialForm(
+var _user$project$Form$emptyForm = _user$project$Form$init(
 	A5(_user$project$Data$Data, '', '', '', '', 0));
-var _user$project$Form$Form = F6(
+var _user$project$Form$Model = F6(
 	function (a, b, c, d, e, f) {
 		return {f1: a, f2: b, f3: c, infinitiv: d, score: e, checked: f};
 	});
@@ -8175,14 +8326,14 @@ var _user$project$Profile$view = function (profile) {
 					]))
 			]));
 };
-var _user$project$Profile$Profile = F3(
+var _user$project$Profile$Model = F3(
 	function (a, b, c) {
 		return {name: a, picUrl: b, level: c};
 	});
-var _user$project$Profile$initialProfile = A3(_user$project$Profile$Profile, 'ninja123', 'http://www.ninjasoftware.net/images/NinjaSoftware.png', 0);
+var _user$project$Profile$initialProfile = A3(_user$project$Profile$Model, 'ninja123', 'http://www.ninjasoftware.net/images/NinjaSoftware.png', 0);
 
-var _user$project$App$getNextForm = function (app) {
-	var _p0 = app.dataStore;
+var _user$project$Level$getNextForm = function (model) {
+	var _p0 = model.dataStore;
 	if (_p0.ctor === '[]') {
 		return {
 			ctor: '_Tuple2',
@@ -8191,85 +8342,117 @@ var _user$project$App$getNextForm = function (app) {
 				[])
 		};
 	} else {
-		var _p3 = _p0._1;
-		var _p2 = _p0._0;
-		var _p1 = app.appMode;
-		if (_p1.ctor === 'ShowProfile') {
-			return {
-				ctor: '_Tuple2',
-				_0: _user$project$Form$initialForm(_p2),
-				_1: _p3
-			};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _user$project$Form$initialForm(_p2),
-				_1: A2(
-					_elm_lang$core$List$append,
-					_p3,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_user$project$Form$getData(app.form)
-						]))
-			};
-		}
+		var _p2 = _p0._1;
+		var _p1 = _p0._0;
+		return (_elm_lang$core$Native_Utils.cmp(model.form.score, 2) > 0) ? {
+			ctor: '_Tuple2',
+			_0: _user$project$Form$init(_p1),
+			_1: _p2
+		} : {
+			ctor: '_Tuple2',
+			_0: _user$project$Form$init(_p1),
+			_1: A2(
+				_elm_lang$core$List$append,
+				_p2,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Form$getData(model.form)
+					]))
+		};
 	}
 };
-var _user$project$App$AppModel = F4(
-	function (a, b, c, d) {
-		return {dataStore: a, form: b, appMode: c, profile: d};
-	});
-var _user$project$App$PlayLevel = {ctor: 'PlayLevel'};
-var _user$project$App$update = F2(
-	function (msg, app) {
-		var _p4 = msg;
-		if (_p4.ctor === 'FormMsg') {
+var _user$project$Level$update = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		if (_p3.ctor === 'FormMsg') {
 			return _elm_lang$core$Native_Utils.update(
-				app,
+				model,
 				{
-					form: A2(_user$project$Form$update, _p4._0, app.form)
+					form: A2(_user$project$Form$update, _p3._0, model.form)
 				});
 		} else {
-			var _p5 = _user$project$App$getNextForm(app);
-			var newForm = _p5._0;
-			var ds = _p5._1;
+			var _p4 = _user$project$Level$getNextForm(model);
+			var newForm = _p4._0;
+			var ds = _p4._1;
 			return _elm_lang$core$Native_Utils.update(
-				app,
-				{form: newForm, dataStore: ds, appMode: _user$project$App$PlayLevel});
+				model,
+				{form: newForm, dataStore: ds});
 		}
 	});
-var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
-var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, form: _user$project$Form$emptyForm, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile};
-var _user$project$App$Next = {ctor: 'Next'};
-var _user$project$App$getNextButton = function (app) {
-	return app.form.checked ? A2(
+var _user$project$Level$Model = F5(
+	function (a, b, c, d, e) {
+		return {level: a, total: b, done: c, form: d, dataStore: e};
+	});
+var _user$project$Level$init = A5(_user$project$Level$Model, 0, 11, 0, _user$project$Form$emptyForm, _user$project$DataStore$getDataStore);
+var _user$project$Level$Next = {ctor: 'Next'};
+var _user$project$Level$FormMsg = function (a) {
+	return {ctor: 'FormMsg', _0: a};
+};
+var _user$project$Level$view = function (model) {
+	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('row')
-			]),
+			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
+				_elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Welcome to level: ',
+					_elm_lang$core$Basics$toString(model.level))),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html_App$map,
+						_user$project$Level$FormMsg,
+						_user$project$Form$view(model.form))
+					])),
 				A2(
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('button'),
-						_elm_lang$html$Html_Attributes$type$('button'),
-						_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+						_elm_lang$html$Html_Events$onClick(_user$project$Level$Next)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text('Next')
 					]))
-			])) : _elm_lang$html$Html$text('');
+			]));
 };
-var _user$project$App$FormMsg = function (a) {
-	return {ctor: 'FormMsg', _0: a};
+
+var _user$project$App$Model = F4(
+	function (a, b, c, d) {
+		return {dataStore: a, level: b, appMode: c, profile: d};
+	});
+var _user$project$App$PlayLevel = {ctor: 'PlayLevel'};
+var _user$project$App$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'StartLevel') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{appMode: _user$project$App$PlayLevel});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					level: A2(_user$project$Level$update, _p0._0, model.level)
+				});
+		}
+	});
+var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
+var _user$project$App$initialAppModel = {dataStore: _user$project$DataStore$getDataStore, level: _user$project$Level$init, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile};
+var _user$project$App$LevelMsg = function (a) {
+	return {ctor: 'LevelMsg', _0: a};
 };
+var _user$project$App$StartLevel = {ctor: 'StartLevel'};
 var _user$project$App$view = function (app) {
-	var _p6 = app.appMode;
-	if (_p6.ctor === 'ShowProfile') {
+	var _p1 = app.appMode;
+	if (_p1.ctor === 'ShowProfile') {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8291,7 +8474,7 @@ var _user$project$App$view = function (app) {
 								[
 									_elm_lang$html$Html_Attributes$class('button'),
 									_elm_lang$html$Html_Attributes$type$('button'),
-									_elm_lang$html$Html_Events$onClick(_user$project$App$Next)
+									_elm_lang$html$Html_Events$onClick(_user$project$App$StartLevel)
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -8307,17 +8490,9 @@ var _user$project$App$view = function (app) {
 			_elm_lang$core$Native_List.fromArray(
 				[
 					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html_App$map,
-							_user$project$App$FormMsg,
-							_user$project$Form$view(app.form))
-						])),
-					_user$project$App$getNextButton(app)
+					_elm_lang$html$Html_App$map,
+					_user$project$App$LevelMsg,
+					_user$project$Level$view(app.level))
 				]));
 	}
 };

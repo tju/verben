@@ -8,16 +8,7 @@ import Data exposing (..)
 import Html.Attributes exposing (type', action, class, method, href, disabled)
 
 
--- main =
---     App.beginnerProgram
---         { model = initialModel
---         , view = view
---         , update = update
---         }
--- MODEL
-
-
-type alias Form =
+type alias Model =
     { f1 : Field.Field
     , f2 : Field.Field
     , f3 : Field.Field
@@ -27,12 +18,13 @@ type alias Form =
     }
 
 
+emptyForm : Model
 emptyForm =
-    initialForm (Data "" "" "" "" 0)
+    init (Data "" "" "" "" 0)
 
 
-initialForm : Data -> Form
-initialForm data =
+init : Data -> Model
+init data =
     { f1 = Field.Field "Präsens (3. Person Singular)" data.f1 "" Field.None
     , f2 = Field.Field "Präteritum (3. Person Singular)" data.f2 "" Field.None
     , f3 = Field.Field "Perfekt (3. Person Singular)" data.f3 "" Field.None
@@ -42,7 +34,7 @@ initialForm data =
     }
 
 
-getData : Form -> Data
+getData : Model -> Data
 getData form =
     { f1 = form.f1.expected
     , f2 = form.f2.expected
@@ -63,17 +55,19 @@ type Msg
     | F3Msg Field.Msg
 
 
+update : Msg -> Model -> Model
 update msg model =
     case msg of
         Check ->
             checkForm model
+
         F1Msg msg ->
             { model | f1 = Field.update msg model.f1 }
 
         F2Msg msg ->
             { model | f2 = Field.update msg model.f2 }
 
-        F3Msg Field.Enter ->
+        F3Msg (Field.Enter) ->
             checkForm model
 
         F3Msg msg ->
@@ -93,7 +87,7 @@ checkForm model =
 
         score =
             if hasErrors model then
-                model.score - 1
+                0
             else
                 model.score + 1
     in
@@ -106,7 +100,7 @@ checkForm model =
         }
 
 
-hasErrors : Form -> Bool
+hasErrors : Model -> Bool
 hasErrors form =
     if (form.f1.status == Field.Success && form.f2.status == Field.Success && form.f3.status == Field.Success) then
         False

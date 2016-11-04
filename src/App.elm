@@ -5,9 +5,11 @@ import Html.Events exposing (onClick)
 import Html.App as App
 import Html.Attributes exposing (type', action, class, method, href)
 import DataStore exposing (..)
-import Form exposing (..)
+import Form
 import Data exposing (..)
-import Profile exposing (..)
+import Profile
+import Level
+import VirtualDom
 
 
 main =
@@ -23,18 +25,20 @@ type AppMode
     | PlayLevel
 
 
-type alias AppModel =
-    { dataStore : List Data
-    , form : Form.Form
+type alias Model =
+    { dataStore :
+        List Data
+        -- not sure!( should be something that gives dataStore)
+    , level : Level.Model
     , appMode : AppMode
-    , profile : Profile
+    , profile : Profile.Model
     }
 
 
-initialAppModel : AppModel
+initialAppModel : Model
 initialAppModel =
     { dataStore = getDataStore
-    , form = Form.emptyForm
+    , level = Level.init
     , appMode = ShowProfile
     , profile = Profile.initialProfile
     }
@@ -45,46 +49,26 @@ initialAppModel =
 
 
 type Msg
-    = FormMsg Form.Msg
-    | Next
+    = StartLevel
+    | LevelMsg Level.Msg
 
 
-update msg app =
+update : Msg -> Model -> Model
+update msg model =
     case msg of
-        FormMsg fMsg ->
-            { app | form = Form.update fMsg app.form }
+        StartLevel ->
+            { model | appMode = PlayLevel }
 
-        Next ->
-            let
-                ( newForm, ds ) =
-                    getNextForm app
-            in
-                { app
-                    | form = newForm
-                    , dataStore = ds
-                    , appMode = PlayLevel
+        LevelMsg lmsg ->
+            { model
+                | level = Level.update lmsg model.level
                 }
-
-
-getNextForm : AppModel -> ( Form.Form, List Data )
-getNextForm app =
-    case app.dataStore of
-        [] ->
-            ( emptyForm, [] )
-
-        h :: t ->
-            case app.appMode of
-                ShowProfile ->
-                    ( initialForm h, t )
-
-                PlayLevel ->
-                    ( initialForm h, List.append t [ (Form.getData app.form) ] )
-
 
 
 -- VIEW
 
 
+view : Model -> VirtualDom.Node Msg
 view app =
     case app.appMode of
         ShowProfile ->
@@ -94,28 +78,11 @@ view app =
                     [ button
                         [ class "button"
                         , type' "button"
-                        , onClick Next
+                        , onClick StartLevel
                         ]
                         [ text "Start" ]
                     ]
                 ]
 
         PlayLevel ->
-            div []
-                [ div [] [ App.map FormMsg (Form.view app.form) ]
-                , getNextButton app
-                ]
-
-
-getNextButton app =
-    if app.form.checked then
-        div [ class "row" ]
-            [ button
-                [ class "button"
-                , type' "button"
-                , onClick Next
-                ]
-                [ text "Next" ]
-            ]
-    else
-        text ""
+            div [] [ App.map LevelMsg (Level.view app.level) ]
