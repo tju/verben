@@ -3,17 +3,14 @@ module Profile exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (type', action, class, method, href, src)
 
-
-type alias Model =
+type alias Profile =
     { name : String
     , picUrl : String
     , level : Int
     }
 
-
 initialProfile =
-    Model "ninja123" "http://www.ninjasoftware.net/images/NinjaSoftware.png" 0
-
+    Profile "ninja123" "http://www.ninjasoftware.net/images/NinjaSoftware.png" 0
 
 view profile =
     div []

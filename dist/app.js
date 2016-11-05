@@ -7897,604 +7897,77 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Data$Data = F5(
-	function (a, b, c, d, e) {
-		return {infinitiv: a, f1: b, f2: c, f3: d, score: e};
-	});
+var _user$project$Types$Model = function (a) {
+	return {appMode: a};
+};
+var _user$project$Types$PlayMode = {ctor: 'PlayMode'};
+var _user$project$Types$ProfileMode = {ctor: 'ProfileMode'};
+var _user$project$Types$Profile = {ctor: 'Profile'};
+var _user$project$Types$Play = {ctor: 'Play'};
 
-var _user$project$DataStore$getDataStore = _elm_lang$core$Native_List.fromArray(
-	[
-		{infinitiv: 'gehen', f1: 'geht', f2: 'ging', f3: 'ist gegangen', score: 0},
-		{infinitiv: 'sein', f1: 'ist', f2: 'war', f3: 'ist gewesen', score: 0},
-		{infinitiv: 'haben', f1: 'hat', f2: 'hatte', f3: 'hat gehabt', score: 0}
-	]);
-
-var _user$project$Field$onKeyUp = function (options) {
-	var filter = F2(
-		function (optionsToCheck, code) {
-			filter:
-			while (true) {
-				var _p0 = optionsToCheck;
-				if (_p0.ctor === '[]') {
-					return _elm_lang$core$Result$Err('key code is not in the list');
-				} else {
-					if (_elm_lang$core$Native_Utils.eq(_p0._0._0, code)) {
-						return _elm_lang$core$Result$Ok(_p0._0._1);
-					} else {
-						var _v1 = _p0._1,
-							_v2 = code;
-						optionsToCheck = _v1;
-						code = _v2;
-						continue filter;
-					}
-				}
-			}
-		});
-	var keyCodes = A2(
-		_elm_lang$core$Json_Decode$customDecoder,
-		_elm_lang$html$Html_Events$keyCode,
-		filter(options));
-	return A2(_elm_lang$html$Html_Events$on, 'keyup', keyCodes);
-};
-var _user$project$Field$onEnter = function (enter) {
-	return _user$project$Field$onKeyUp(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{ctor: '_Tuple2', _0: 13, _1: enter}
-			]));
-};
-var _user$project$Field$getStatusClass = function (status) {
-	var _p1 = status;
-	switch (_p1.ctor) {
-		case 'None':
-			return _elm_lang$html$Html_Attributes$class('row');
-		case 'Success':
-			return _elm_lang$html$Html_Attributes$class('row has-success');
-		default:
-			return _elm_lang$html$Html_Attributes$class('row has-error');
-	}
-};
-var _user$project$Field$Field = F4(
-	function (a, b, c, d) {
-		return {label: a, expected: b, entered: c, status: d};
-	});
-var _user$project$Field$Success = {ctor: 'Success'};
-var _user$project$Field$Error = {ctor: 'Error'};
-var _user$project$Field$checkStatus = function (field) {
-	return _elm_lang$core$Native_Utils.eq(field.entered, field.expected) ? _user$project$Field$Success : _user$project$Field$Error;
-};
-var _user$project$Field$None = {ctor: 'None'};
-var _user$project$Field$update = F2(
-	function (msg, field) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'SetField':
-				return _elm_lang$core$Native_Utils.update(
-					field,
-					{entered: _p2._0, status: _user$project$Field$None});
-			case 'Check':
-				return _elm_lang$core$Native_Utils.update(
-					field,
-					{
-						status: _user$project$Field$checkStatus(field)
-					});
-			default:
-				return field;
-		}
-	});
-var _user$project$Field$Enter = {ctor: 'Enter'};
-var _user$project$Field$Check = {ctor: 'Check'};
-var _user$project$Field$SetField = function (a) {
-	return {ctor: 'SetField', _0: a};
-};
-var _user$project$Field$fieldTemplate = function (field) {
-	var _p3 = field.status;
-	switch (_p3.ctor) {
-		case 'None':
-			return A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$type$('text'),
-						_user$project$Field$onEnter(_user$project$Field$Enter),
-						_elm_lang$html$Html_Events$onInput(_user$project$Field$SetField),
-						_elm_lang$html$Html_Attributes$value(field.entered)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[]));
-		case 'Error':
-			return A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('result')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('expected')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(field.expected)
-							])),
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('entered')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(field.entered)
-							]))
-					]));
-		default:
-			return A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('result')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$span,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('entered')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(field.entered)
-							]))
-					]));
-	}
-};
-var _user$project$Field$view = function (field) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$Field$getStatusClass(field.status)
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$label,
-						_elm_lang$core$Native_List.fromArray(
-							[]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(field.label)
-							]))
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_user$project$Field$fieldTemplate(field)
-					]))
-			]));
-};
-
-var _user$project$Form$hasErrors = function (form) {
-	return (_elm_lang$core$Native_Utils.eq(form.f1.status, _user$project$Field$Success) && (_elm_lang$core$Native_Utils.eq(form.f2.status, _user$project$Field$Success) && _elm_lang$core$Native_Utils.eq(form.f3.status, _user$project$Field$Success))) ? false : true;
-};
-var _user$project$Form$checkForm = function (model) {
-	var score = _user$project$Form$hasErrors(model) ? 0 : (model.score + 1);
-	var f3 = A2(_user$project$Field$update, _user$project$Field$Check, model.f3);
-	var f2 = A2(_user$project$Field$update, _user$project$Field$Check, model.f2);
-	var f1 = A2(_user$project$Field$update, _user$project$Field$Check, model.f1);
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{f1: f1, f2: f2, f3: f3, score: score, checked: true});
-};
-var _user$project$Form$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Check':
-				return _user$project$Form$checkForm(model);
-			case 'F1Msg':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						f1: A2(_user$project$Field$update, _p0._0, model.f1)
-					});
-			case 'F2Msg':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						f2: A2(_user$project$Field$update, _p0._0, model.f2)
-					});
-			default:
-				if (_p0._0.ctor === 'Enter') {
-					return _user$project$Form$checkForm(model);
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							f3: A2(_user$project$Field$update, _p0._0, model.f3)
-						});
-				}
-		}
-	});
-var _user$project$Form$getData = function (form) {
-	return {f1: form.f1.expected, f2: form.f2.expected, f3: form.f3.expected, infinitiv: form.infinitiv, score: form.score};
-};
-var _user$project$Form$init = function (data) {
-	return {
-		f1: A4(_user$project$Field$Field, 'Präsens (3. Person Singular)', data.f1, '', _user$project$Field$None),
-		f2: A4(_user$project$Field$Field, 'Präteritum (3. Person Singular)', data.f2, '', _user$project$Field$None),
-		f3: A4(_user$project$Field$Field, 'Perfekt (3. Person Singular)', data.f3, '', _user$project$Field$None),
-		infinitiv: data.infinitiv,
-		score: data.score,
-		checked: false
-	};
-};
-var _user$project$Form$emptyForm = _user$project$Form$init(
-	A5(_user$project$Data$Data, '', '', '', '', 0));
-var _user$project$Form$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {f1: a, f2: b, f3: c, infinitiv: d, score: e, checked: f};
-	});
-var _user$project$Form$F3Msg = function (a) {
-	return {ctor: 'F3Msg', _0: a};
-};
-var _user$project$Form$F2Msg = function (a) {
-	return {ctor: 'F2Msg', _0: a};
-};
-var _user$project$Form$F1Msg = function (a) {
-	return {ctor: 'F1Msg', _0: a};
-};
-var _user$project$Form$Check = {ctor: 'Check'};
-var _user$project$Form$checkButton = function (form) {
-	return form.checked ? _elm_lang$html$Html$text('') : A2(
-		_elm_lang$html$Html$button,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$type$('button'),
-				_elm_lang$html$Html_Attributes$disabled(
-				_elm_lang$core$Native_Utils.eq(form.f1.entered, '') || (_elm_lang$core$Native_Utils.eq(form.f2.entered, '') || _elm_lang$core$Native_Utils.eq(form.f3.entered, ''))),
-				_elm_lang$html$Html_Attributes$class('button'),
-				_elm_lang$html$Html_Events$onClick(_user$project$Form$Check)
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text('Check')
-			]));
-};
-var _user$project$Form$view = function (model) {
-	var _p1 = model.infinitiv;
-	if (_p1 === '') {
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	} else {
-		return A2(
-			_elm_lang$html$Html$form,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$action(''),
-					_elm_lang$html$Html_Attributes$class('form'),
-					_elm_lang$html$Html_Attributes$method('')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('header header-primary text-center')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$h2,
-							_elm_lang$core$Native_List.fromArray(
-								[]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text(_p1)
-								]))
-						])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('content')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html_App$map,
-							_user$project$Form$F1Msg,
-							_user$project$Field$view(model.f1)),
-							A2(
-							_elm_lang$html$Html_App$map,
-							_user$project$Form$F2Msg,
-							_user$project$Field$view(model.f2)),
-							A2(
-							_elm_lang$html$Html_App$map,
-							_user$project$Form$F3Msg,
-							_user$project$Field$view(model.f3))
-						])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('row ')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$div,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Attributes$class('column')
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_user$project$Form$checkButton(model)
-								]))
-						]))
-				]));
-	}
-};
-
-var _user$project$Profile$view = function (profile) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('row')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$div,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('column col-center')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_elm_lang$html$Html$img,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html_Attributes$class('profilePic'),
-										_elm_lang$html$Html_Attributes$src(profile.picUrl)
-									]),
-								_elm_lang$core$Native_List.fromArray(
-									[]))
-							])),
-						A2(
-						_elm_lang$html$Html$div,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('column')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(
-								_elm_lang$html$Html$h5,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(profile.name)
-									])),
-								A2(
-								_elm_lang$html$Html$h3,
-								_elm_lang$core$Native_List.fromArray(
-									[]),
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_elm_lang$html$Html$text(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											'Level',
-											_elm_lang$core$Basics$toString(profile.level)))
-									]))
-							]))
-					]))
-			]));
-};
-var _user$project$Profile$Model = F3(
-	function (a, b, c) {
-		return {name: a, picUrl: b, level: c};
-	});
-var _user$project$Profile$initialProfile = A3(_user$project$Profile$Model, 'ninja123', 'http://www.ninjasoftware.net/images/NinjaSoftware.png', 0);
-
-var _user$project$Level$getNextForm = function (model) {
-	var _p0 = model.dataStore;
-	if (_p0.ctor === '[]') {
-		return {
-			ctor: '_Tuple2',
-			_0: _user$project$Form$emptyForm,
-			_1: _elm_lang$core$Native_List.fromArray(
-				[])
-		};
-	} else {
-		var _p2 = _p0._1;
-		var _p1 = _p0._0;
-		return (_elm_lang$core$Native_Utils.cmp(model.form.score, 2) > 0) ? {
-			ctor: '_Tuple2',
-			_0: _user$project$Form$init(_p1),
-			_1: _p2
-		} : {
-			ctor: '_Tuple2',
-			_0: _user$project$Form$init(_p1),
-			_1: A2(
-				_elm_lang$core$List$append,
-				_p2,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_user$project$Form$getData(model.form)
-					]))
-		};
-	}
-};
-var _user$project$Level$update = F2(
-	function (msg, model) {
-		var _p3 = msg;
-		if (_p3.ctor === 'FormMsg') {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{
-					form: A2(_user$project$Form$update, _p3._0, model.form)
-				});
+var _user$project$State$update = F2(
+	function (action, app) {
+		var _p0 = action;
+		if (_p0.ctor === 'Play') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					app,
+					{appMode: _user$project$Types$PlayMode}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
 		} else {
-			var _p4 = _user$project$Level$getNextForm(model);
-			var newForm = _p4._0;
-			var ds = _p4._1;
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{form: newForm, dataStore: ds});
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					app,
+					{appMode: _user$project$Types$ProfileMode}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
 		}
 	});
-var _user$project$Level$Model = F5(
-	function (a, b, c, d, e) {
-		return {level: a, total: b, done: c, form: d, dataStore: e};
-	});
-var _user$project$Level$init = A5(_user$project$Level$Model, 0, 11, 0, _user$project$Form$emptyForm, _user$project$DataStore$getDataStore);
-var _user$project$Level$Next = {ctor: 'Next'};
-var _user$project$Level$FormMsg = function (a) {
-	return {ctor: 'FormMsg', _0: a};
-};
-var _user$project$Level$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'Welcome to level: ',
-					_elm_lang$core$Basics$toString(model.level))),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html_App$map,
-						_user$project$Level$FormMsg,
-						_user$project$Form$view(model.form))
-					])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Level$Next)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Next')
-					]))
-			]));
-};
-
-var _user$project$App$subscriptions = function (model) {
+var _user$project$State$subscriptions = function (_p1) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _user$project$App$Model = F4(
-	function (a, b, c, d) {
-		return {dataStore: a, level: b, appMode: c, profile: d};
-	});
-var _user$project$App$PlayLevel = {ctor: 'PlayLevel'};
-var _user$project$App$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'StartLevel') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{appMode: _user$project$App$PlayLevel}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						level: A2(_user$project$Level$update, _p0._0, model.level)
-					}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		}
-	});
-var _user$project$App$ShowProfile = {ctor: 'ShowProfile'};
-var _user$project$App$init = {
+var _user$project$State$init = {
 	ctor: '_Tuple2',
-	_0: {dataStore: _user$project$DataStore$getDataStore, level: _user$project$Level$init, appMode: _user$project$App$ShowProfile, profile: _user$project$Profile$initialProfile},
+	_0: _user$project$Types$Model(_user$project$Types$ProfileMode),
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _user$project$App$LevelMsg = function (a) {
-	return {ctor: 'LevelMsg', _0: a};
-};
-var _user$project$App$StartLevel = {ctor: 'StartLevel'};
-var _user$project$App$view = function (app) {
-	var _p1 = app.appMode;
-	if (_p1.ctor === 'ShowProfile') {
+
+var _user$project$View$rootView = function (app) {
+	var _p0 = app.appMode;
+	if (_p0.ctor === 'ProfileMode') {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_user$project$Profile$view(app.profile),
 					A2(
 					_elm_lang$html$Html$div,
 					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$html$Html_Attributes$class('row')
-						]),
+							_elm_lang$html$Html$text('This is your profile')
+						])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
 					_elm_lang$core$Native_List.fromArray(
 						[
 							A2(
-							_elm_lang$html$Html$button,
+							_elm_lang$html$Html$input,
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html_Attributes$class('button'),
 									_elm_lang$html$Html_Attributes$type$('button'),
-									_elm_lang$html$Html_Events$onClick(_user$project$App$StartLevel)
+									_elm_lang$html$Html_Attributes$value('Play'),
+									_elm_lang$html$Html_Events$onClick(_user$project$Types$Play)
 								]),
 							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('Start')
-								]))
+								[]))
 						]))
 				]));
 	} else {
@@ -8505,15 +7978,37 @@ var _user$project$App$view = function (app) {
 			_elm_lang$core$Native_List.fromArray(
 				[
 					A2(
-					_elm_lang$html$Html_App$map,
-					_user$project$App$LevelMsg,
-					_user$project$Level$view(app.level))
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text('Play Mode')
+						])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$input,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$type$('button'),
+									_elm_lang$html$Html_Attributes$value('go to profile'),
+									_elm_lang$html$Html_Events$onClick(_user$project$Types$Profile)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[]))
+						]))
 				]));
 	}
 };
+
 var _user$project$App$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$App$init, view: _user$project$App$view, update: _user$project$App$update, subscriptions: _user$project$App$subscriptions})
+		{init: _user$project$State$init, update: _user$project$State$update, subscriptions: _user$project$State$subscriptions, view: _user$project$View$rootView})
 };
 
 var Elm = {};

@@ -4,7 +4,6 @@ import Html exposing (..)
 import Html.App as App
 import Html.Events exposing (onInput, onClick)
 import Field
-import Data exposing (..)
 import Html.Attributes exposing (type', action, class, method, href, disabled)
 
 
@@ -55,23 +54,23 @@ type Msg
     | F3Msg Field.Msg
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Check ->
-            checkForm model
+            ( checkForm model, Cmd.none )
 
         F1Msg msg ->
-            { model | f1 = Field.update msg model.f1 }
+            ( { model | f1 = Field.update msg model.f1 }, Cmd.none )
 
         F2Msg msg ->
-            { model | f2 = Field.update msg model.f2 }
+            ( { model | f2 = Field.update msg model.f2 }, Cmd.none )
 
         F3Msg (Field.Enter) ->
-            checkForm model
+            ( checkForm model, Cmd.none )
 
         F3Msg msg ->
-            { model | f3 = Field.update msg model.f3 }
+            ( { model | f3 = Field.update msg model.f3 }, Cmd.none )
 
 
 checkForm model =
@@ -142,3 +141,39 @@ checkButton form =
             , onClick Check
             ]
             [ text "Check" ]
+
+
+
+
+type alias Data =
+    { infinitiv : String
+    , f1 : String
+    , f2 : String
+    , f3 : String
+    , score : Int
+    }
+
+getDataStore : List Data
+getDataStore =
+    -- todo real store from DB?!
+    [ { infinitiv = "gehen"
+      , f1 = "geht"
+      , f2 = "ging"
+      , f3 = "ist gegangen"
+      , score = 0
+      }
+    , { infinitiv = "sein"
+      , f1 = "ist"
+      , f2 = "war"
+      , f3 = "ist gewesen"
+      , score = 0
+      }
+    , { infinitiv = "haben"
+      , f1 = "hat"
+      , f2 = "hatte"
+      , f3 = "hat gehabt"
+      , score = 0
+      }
+    ]
+
+
