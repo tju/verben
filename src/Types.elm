@@ -10,5 +10,7 @@ type alias Model =
 
 
 type Msg
-    = Play
+    = NoOp
+    | Play
     | Profile
+    | TestFocus

@@ -21,5 +21,10 @@ rootView app =
             div []
                 [ div [] [text "Play Mode" ]
                 , div [] [ input [type' "button", value "go to profile", onClick Profile] []]
+                , div [] [ input [type' "button", value "test focus change", onClick TestFocus] []]
+                , div []
+                    [ input [type' "text", id "field1", value "aaa" ][]
+                    , input [type' "text", id "field2", value "bbb" ][]
+                    ]
                 ]
 
